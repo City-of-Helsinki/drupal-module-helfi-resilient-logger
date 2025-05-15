@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\helfi_resilient_logger\Facade;
+namespace Drupal\helfi_resilient_logger\Sources;
 
 use Drupal\helfi_resilient_logger\Entity\ResilientLogEntry;
-use ResilientLogger\Facade\AbstractLogFacade;
+use ResilientLogger\Sources\AbstractLogSource;
 
-class ResilientLogFacade implements AbstractLogFacade {
+class ResilientLogSource implements AbstractLogSource {
     private ResilientLogEntry $log;
 
     public function __construct(ResilientLogEntry $log) {
@@ -37,7 +37,7 @@ class ResilientLogFacade implements AbstractLogFacade {
         $this->log->save();
     }
 
-    public static function create(int $level, mixed $message, array $context = []): AbstractLogFacade {
+    public static function create(int $level, mixed $message, array $context = []): AbstractLogSource {
         $payload = [
             "level" => $level,
             "message" => json_encode($message),
@@ -47,10 +47,10 @@ class ResilientLogFacade implements AbstractLogFacade {
         $entry = ResilientLogEntry::create($payload);
         $entry->save();
 
-        return new ResilientLogFacade($entry);
+        return new ResilientLogSource($entry);
     }
     
-    /** @return \Generator<AbstractLogFacade> */
+    /** @return \Generator<AbstractLogSource> */
     public static function getUnsentEntries(int $chunkSize): \Generator {
         $storage = \Drupal::entityTypeManager()->getStorage("resilient_log_entry");
         $query = $storage->getQuery();
@@ -62,7 +62,7 @@ class ResilientLogFacade implements AbstractLogFacade {
         
         foreach ($nids as $nid) {
             $entry = ResilientLogEntry::load($nid);
-            yield new ResilientLogFacade($entry);
+            yield new ResilientLogSource($entry);
         }
     }
 
