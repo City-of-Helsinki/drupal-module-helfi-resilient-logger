@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\helfi_resilient_logger\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
@@ -39,7 +41,7 @@ class ResilientLogEntry extends ContentEntityBase implements ContentEntityInterf
         ->setDefaultValue(FALSE)
         ->setReadOnly(FALSE);
 
-      $fields['level'] = BaseFieldDefinition::create('string')
+      $fields['level'] = BaseFieldDefinition::create('integer')
         ->setLabel(t('level'))
         ->setDescription(t('Level for this log message.'))
         ->setReadOnly(TRUE);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\helfi_resilient_logger\Sources;
 
 use Drupal\helfi_resilient_logger\Entity\ResilientLogEntry;
@@ -13,11 +15,11 @@ class ResilientLogSource implements AbstractLogSource {
     }
 
     public function getId(): int {
-        return $this->log->get('id')->value;
+        return intval($this->log->get('id')->value);
     }
 
     public function getLevel(): int {
-        return $this->log->get('level')->value;
+        return intval($this->log->get('level')->value);
     }
 
     public function getMessage(): mixed {
