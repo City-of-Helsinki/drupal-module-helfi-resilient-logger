@@ -1,51 +1,15 @@
 <?php
 
-use Drupal\resilient_logger\Submitter\AbstractSubmitter;
+use Drupal\helfi_resilient_logger\ResilientLoggerTasks;
 
 /**
  * Implements hook_cron().
  *
  * Add methods here to be executed via cron.
  */
-function resilient_logger_cron() {
-  $now = time();
-  $logger = \Drupal::logger('resilient_logger.module');
-
-  /** @var AbstractSubmitter $submitter */
-  $submitter = \Drupal::service('resilient_logger.submitter');
-  
-  /** @var int $submitUnsentAt */
-  \Drupal::state()->set('resilient_logger.next_submit_unsent', 0);
-  $submitUnsentAt = \Drupal::state()->get('resilient_logger.next_submit_unsent', 0);
-
-  if ($submitUnsentAt < $now) {
-    $nextSubmitUnsentAt = $submitter->getNextSubmitUnsentAt($now);
-
-    if ($nextSubmitUnsentAt !== false) {
-      $logger->info("Submitting unsent entries");
-      $submitter->submitUnsentEntries();
-      \Drupal::state()->set('resilient_logger.next_submit_unsent', $nextSubmitUnsentAt);
-    } else {
-      $logger->info("Skipping submit unsent entries");
-    }
-  }
-
-  /** @var int $clearSentAt */
-  \Drupal::state()->set('resilient_logger.next_clear_sent', 0);
-  $clearSentAt = \Drupal::state()->get('resilient_logger.next_clear_sent', 0);
-
-  if ($clearSentAt < $now) {
-    $nextClearSentAt = $submitter->getNextClearSentAt($now);
-
-    if ($nextClearSentAt !== false) {
-      $logger->info("Clearing sent entries");
-      $submitter->clearSentEntries();
-      \Drupal::state()->set('resilient_logger.next_clear_sent', $nextClearSentAt);
-    } else {
-      $logger->info("Skipping clear sent entries");
-    }
-  }
+function helfi_resilient_logger_cron() {
+  $tasks = ResilientLoggerTasks::create();
+  $tasks->handleCronTasks();
 }
-
 
 ?>
