@@ -9,6 +9,7 @@ use ResilientLogger\Targets\AbstractLogTarget;
 use \Psr\Log\LoggerInterface;
 
 class ProxyLogTarget extends AbstractLogTarget {
+  private const OPTION_LOGGER_NAME = "name";
   private const DEFAULT_LOGGER_NAME = "resilient_logger";
 
   private LoggerInterface $logger;
@@ -16,8 +17,8 @@ class ProxyLogTarget extends AbstractLogTarget {
   public function __construct(array $options) {
     parent::__construct($options);
 
-    $name = array_key_exists("name", $options)
-      ? $options["name"]
+    $name = array_key_exists(self::OPTION_LOGGER_NAME, $options)
+      ? $options[self::OPTION_LOGGER_NAME]
       : self::DEFAULT_LOGGER_NAME;
     
     $this->logger = \Drupal::logger($name);
