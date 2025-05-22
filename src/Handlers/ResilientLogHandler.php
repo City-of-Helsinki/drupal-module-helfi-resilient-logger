@@ -10,8 +10,11 @@ use ResilientLogger\Handler\ResilientLogHandler as ResilientLogHandlerBase;
 class ResilientLogHandler extends ResilientLogHandlerBase {
   /**
    * Same as base ResilientLogHandler but ResilientLogSource passed in by default.
+   *
+   * @param array<string> $requiredFields
+   *   List of required context fields to be passed for the logger. 
    */
-  public function __construct(protected string $logSource = ResilientLogSource::class) {
-    parent::__construct($logSource);
+  public function __construct(array $requiredFields) {
+    parent::__construct(ResilientLogSource::class, $requiredFields);
   }
 }
