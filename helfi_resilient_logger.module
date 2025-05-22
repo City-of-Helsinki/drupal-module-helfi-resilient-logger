@@ -8,8 +8,9 @@ use Drupal\helfi_resilient_logger\ResilientLoggerTasks;
  * Add methods here to be executed via cron.
  */
 function helfi_resilient_logger_cron() {
+  $now = time();
   $tasks = ResilientLoggerTasks::create();
-  $tasks->handleCronTasks();
+  $tasks->handleTasks($now);
 }
 
 ?>
