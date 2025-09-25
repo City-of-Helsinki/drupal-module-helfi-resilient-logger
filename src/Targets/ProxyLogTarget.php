@@ -7,6 +7,7 @@ namespace Drupal\helfi_resilient_logger\Targets;
 use ResilientLogger\Sources\AbstractLogSource;
 use ResilientLogger\Targets\AbstractLogTarget;
 use \Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 class ProxyLogTarget extends AbstractLogTarget {
   private const OPTION_LOGGER_NAME = "name";
@@ -25,7 +26,22 @@ class ProxyLogTarget extends AbstractLogTarget {
   }
 
   public function submit(AbstractLogSource $entry): bool {
-    $this->logger->log($entry->getLevel(), $entry->getMessage(), $entry->getContext());
+    $document = $entry->getDocument();
+    $auditEvent = $document["audit_event"];
+    $actor = $auditEvent["actor"] ?? "unknown";
+    $operation = $auditEvent["operation"] ?? "MANUAL";
+    $target = $auditEvent["target"] ?? "unknown";
+    $message = $auditEvent["message"];
+    $level = $auditEvent["level"] ?? LogLevel::INFO;
+    $extra = $auditEvent["extra"] ?? [];
+
+    $context = array_merge($extra, [
+      "actor" => $actor,
+      "operation" => $operation,
+      "target" => $target
+    ]);
+
+    $this->logger->log($level, $message, $context);
     return true;
   }
 }

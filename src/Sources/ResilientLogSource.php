@@ -6,9 +6,18 @@ namespace Drupal\helfi_resilient_logger\Sources;
 
 use Drupal\helfi_resilient_logger\Entity\ResilientLogEntry;
 use ResilientLogger\Sources\AbstractLogSource;
+use ResilientLogger\Sources\Types;
+use ResilientLogger\Utils\Helpers;
 
+/**
+ * @phpstan-import-type LogSourceConfig from Types
+ * @phpstan-import-type AuditLogDocument from Types
+ */
 class ResilientLogSource implements AbstractLogSource {
     private ResilientLogEntry $log;
+
+    /** @var LogSourceConfig $config */
+    private static array $config;
 
     public function __construct(ResilientLogEntry $log) {
         $this->log = $log;
@@ -18,16 +27,37 @@ class ResilientLogSource implements AbstractLogSource {
         return intval($this->log->get('id')->value);
     }
 
-    public function getLevel(): int {
-        return intval($this->log->get('level')->value);
-    }
+    /**
+     * @return AuditLogDocument
+     */
+    public function getDocument(): array {
+        $level = intval($this->log->get('level')->value);
+        $message = json_decode($this->log->get('message')->value);
+        $context = json_decode($this->log->get('context')->value, true);
+        $createdAt = $this->log->get('created_at')->value;
 
-    public function getMessage(): mixed {
-        return json_decode($this->log->get('message')->value);
-    }
+        $actor = $context["actor"] ?? "unknown";
+        $operation = $context["operation"] ?? "MANUAL";
+        $target = $context["target"] ?? "unknown";
 
-    public function getContext(): array {
-        return json_decode($this->log->get('context')->value, true);
+        unset($context["actor"]);
+        unset($context["operation"]);
+        unset($context["target"]);
+
+        return [
+            "@timestamp" => $createdAt,
+            "audit_event" => [
+                "actor" => Helpers::valueAsArray($actor),
+                "date_time" => $createdAt,
+                "operation" => $operation,
+                "origin" => self::$config["origin"],
+                "target" => Helpers::valueAsArray($target),
+                "environment" => self::$config["environment"],
+                "message" => $message,
+                "level" => $level,
+                "extra" => $context,
+            ],
+        ];
     }
 
     public function isSent(): bool {
@@ -37,6 +67,10 @@ class ResilientLogSource implements AbstractLogSource {
     public function markSent(): void {
         $this->log->set('is_sent', TRUE);
         $this->log->save();
+    }
+
+    public static function configure(mixed $config): void {
+        self::$config = $config;
     }
 
     public static function create(int $level, mixed $message, array $context = []): AbstractLogSource {
