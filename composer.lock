@@ -68,12 +68,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/City-of-Helsinki/php-resilient-logger.git",
-                "reference": "8f5c3932e129376011e226902a0cb267ef2841c2"
+                "reference": "7bffc742006b28481bf6cc240358f0dc66fc69b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/City-of-Helsinki/php-resilient-logger/zipball/8f5c3932e129376011e226902a0cb267ef2841c2",
-                "reference": "8f5c3932e129376011e226902a0cb267ef2841c2",
+                "url": "https://api.github.com/repos/City-of-Helsinki/php-resilient-logger/zipball/7bffc742006b28481bf6cc240358f0dc66fc69b8",
+                "reference": "7bffc742006b28481bf6cc240358f0dc66fc69b8",
                 "shasum": ""
             },
             "require": {
@@ -108,7 +108,7 @@
                 "source": "https://github.com/City-of-Helsinki/php-resilient-logger/tree/develop",
                 "issues": "https://github.com/City-of-Helsinki/php-resilient-logger/issues"
             },
-            "time": "2025-09-25T11:03:04+00:00"
+            "time": "2025-09-25T12:03:24+00:00"
         },
         {
             "name": "composer/semver",

@@ -16,7 +16,7 @@ class ResilientLogger extends ResilientLoggerBase {
     /** @var ResilientLoggerOptions $options */
     $options = $settings->get('resilient_logger', []);
 
-    return parent::create($options);
+    return self::create($options);
   }
 }
 
