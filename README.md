@@ -88,7 +88,9 @@ $settings["resilient_logger"] = [
   "origin" => "<origin>",
   "store_old_entries_days" => 30,
   "batch_limit" => 5000,
-  "chunk_size" => 500
+  "chunk_size" => 500,
+  "schedule_submit_unsent_entries" => "+15min",
+  "schedule_clear_sent_entries" => "first day of next month midnight",
 ];
 ```
 
@@ -97,11 +99,6 @@ $settings["resilient_logger"] = [
 Register the logger service and cron task offsets:
 
 ```yaml
-parameters:
-  resilient_logger.tasks:
-    offset_submit: '+15min'
-    offset_clear: 'first day of next month midnight'
-
 services:
   resilient_logger.service:
     class: ResilientLogger\ResilientLogger
