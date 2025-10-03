@@ -9,15 +9,15 @@ use ResilientLogger\ResilientLogger;
 use Drupal\Core\State\StateInterface;
 
 class ResilientLoggerTasks {
-  private const DEFAULT_OFFSET_SUBMIT = "+15min";
-  private const DEFAULT_OFFSET_CLEAR = "first day of next month midnight";
-
-  private const PARAMETER_NAME = "resilient_logger.tasks";
+  private const SETTINGS_NAME = "resilient_logger";
   private const LOGGER_CHANNEL = "resilient_logger.tasks";
   private const SERVICE_NAME = "resilient_logger.service";
 
-  private const PARAM_KEY_OFFSET_SUBMIT = "offset_submit";
-  private const PARAM_KEY_OFFSET_CLEAR = "offset_clear";
+  private const DEFAULT_OFFSET_SUBMIT = "+15min";
+  private const DEFAULT_OFFSET_CLEAR = "first day of next month midnight";
+
+  private const PARAM_KEY_OFFSET_SUBMIT = "schedule_submit_unsent_entries";
+  private const PARAM_KEY_OFFSET_CLEAR = "schedule_clear_sent_entries";
 
   private const STATE_KEY_PREV_SUBMIT = "resilient_logger.prev_submit_unsent";
   private const STATE_KEY_PREV_CLEAR = "resilient_logger.prev_clear_sent";
@@ -64,25 +64,13 @@ class ResilientLoggerTasks {
    * will be used instead.
    */
   public static function create() {
-    $container = \Drupal::getContainer();
-    $submitDateOffset = self::DEFAULT_OFFSET_SUBMIT;
-    $clearDateOffset = self::DEFAULT_OFFSET_CLEAR;
+    /** @var \Drupal\Core\Site\Settings $settings */
+    $settings = \Drupal::service('settings');
 
-    if ($container->hasParameter(self::PARAMETER_NAME)) {
-      $params = $container->getParameter(self::PARAMETER_NAME);
-
-      if (is_array($params)) {
-        if (array_key_exists(self::PARAM_KEY_OFFSET_SUBMIT, $params)) {
-          /** @var string|null $submitDateOffset */
-          $submitDateOffset = $params[self::PARAM_KEY_OFFSET_SUBMIT];
-        }
-
-        if (array_key_exists(self::PARAM_KEY_OFFSET_CLEAR, $params)) {
-          /** @var string|null $clearDateOffset */
-          $clearDateOffset = $params[self::PARAM_KEY_OFFSET_CLEAR];
-        }
-      }
-    }
+    // Retrieve your resilient_logger settings.
+    $config = $settings->get(self::SETTINGS_NAME, []);
+    $submitDateOffset = $config[self::PARAM_KEY_OFFSET_SUBMIT] ?? self::DEFAULT_OFFSET_SUBMIT;
+    $clearDateOffset = $config[self::PARAM_KEY_OFFSET_CLEAR] ?? self::DEFAULT_OFFSET_CLEAR;
 
     return new static($submitDateOffset, $clearDateOffset);
   }
