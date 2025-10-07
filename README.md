@@ -113,7 +113,12 @@ Register resilient logger as monolog channel handler in monolog.services.yml:
 parameters:
   monolog.channel_handlers:
     resilient: ['resilient_logger']
-    ...
+  ...
+services:
+  monolog.handler.resilient_logger:
+    class: ResilientLogger\Handler\ResilientLogHandler
+    arguments: ['Drupal\helfi_resilient_logger\Sources\ResilientLogSource']
+  ...
 ```
 
 ### Configuration options
@@ -125,9 +130,8 @@ parameters:
 - **store_old_entries_days**: Retention period for delivered entries  
 - **batch_limit**: Max entries processed during one cron run  
 - **chunk_size**: Number of entries fetched per DB query (prevents memory issues)  
-- **resilient_logger.tasks**:  
-  - `offset_submit`: Schedule for sending unsent entries
-  - `offset_clear`: Schedule for clearing old entries  
+- **schedule_submit_unsent_entries**: Schedule for sending unsent entries
+- **schedule_clear_sent_entries**: Schedule for clearing old entries  
 
 ---
 
