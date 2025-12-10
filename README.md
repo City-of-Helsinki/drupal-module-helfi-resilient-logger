@@ -42,7 +42,7 @@ A resilient logger module for Drupal, maintained by the City of Helsinki.
 
 1. Add the module to your project:  
    ```bash
-   composer require city-of-helsinki/drupal-module-helfi-resilient-logger
+   composer require drupal/helfi_resilient_logger
    ```
 
 2. Enable it via Drush or the Drupal admin UI:  
