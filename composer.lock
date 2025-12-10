@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa2c98c2b1103477e8594db83e9f62d0",
+    "content-hash": "043756ac1b528cf6d569e3fb746c9ff0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -64,16 +64,16 @@
         },
         {
             "name": "city-of-helsinki/php-resilient-logger",
-            "version": "dev-develop",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/City-of-Helsinki/php-resilient-logger.git",
-                "reference": "7bffc742006b28481bf6cc240358f0dc66fc69b8"
+                "reference": "d5d76a69adef094b45a295b032cf0dda328e74ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/City-of-Helsinki/php-resilient-logger/zipball/7bffc742006b28481bf6cc240358f0dc66fc69b8",
-                "reference": "7bffc742006b28481bf6cc240358f0dc66fc69b8",
+                "url": "https://api.github.com/repos/City-of-Helsinki/php-resilient-logger/zipball/d5d76a69adef094b45a295b032cf0dda328e74ff",
+                "reference": "d5d76a69adef094b45a295b032cf0dda328e74ff",
                 "shasum": ""
             },
             "require": {
@@ -89,6 +89,7 @@
                 "phpspec/prophecy-phpunit": "^2.3",
                 "phpunit/phpunit": "^10.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -108,7 +109,7 @@
                 "source": "https://github.com/City-of-Helsinki/php-resilient-logger/tree/develop",
                 "issues": "https://github.com/City-of-Helsinki/php-resilient-logger/issues"
             },
-            "time": "2025-09-25T12:03:24+00:00"
+            "time": "2025-10-07T06:14:15+00:00"
         },
         {
             "name": "composer/semver",
